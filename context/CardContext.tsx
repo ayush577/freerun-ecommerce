@@ -128,12 +128,15 @@ const CartContext = createContext<{
 
 function CartProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState, () => {
+    if(typeof window === 'undefined') return initialState
     const localData = localStorage.getItem('cart')
     return localData ? JSON.parse(localData) : initialState
   })
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(state));
+    if (typeof window !== 'undefined'){
+      localStorage.setItem('cart', JSON.stringify(state));
+    }
   }, [state]);
 
   function addToCart(item: ProductItem) {
