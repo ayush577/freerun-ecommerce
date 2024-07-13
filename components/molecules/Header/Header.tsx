@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -10,10 +10,14 @@ import { Icons } from '@/components/atom/Icons/Icons';
 import { MainNav } from './MainNav';
 
 export const Header = () => {
-
+  const [isClient, setIsClient] = useState(false)
   const { cart } = useCart();
 
   const allItemInCart = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,7 +28,7 @@ export const Header = () => {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Link href="/cart">
-                  <div
+                  <button
                     className={cn(
                       buttonVariants({
                         variant: 'ghost',
@@ -33,12 +37,12 @@ export const Header = () => {
                     )}
                   >
                     <Icons.cart className="h-[18px] w-[18px] fill-current" />
-                    {allItemInCart > 0 && (
-                      <span className="absolute -top-1 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
+                    {isClient && allItemInCart > 0 && (
+                      <span className="absolute -top-[2px] -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-orange-500 text-xs text-white">
                         {allItemInCart}
                       </span>
                     )}
-                  </div>
+                  </button>
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="bottom" sideOffset={15}>

@@ -29,9 +29,9 @@ export const CartList: FC<CartListProps> = ({ item, quantity }) => {
   }
 
   return (
-    <li className="flex items-center justify-between border-b border-zinc-900 pb-[1.6rem]">
-      <div className="flex items-center gap-5">
-        <div className="relative rounded-md h-[80px] w-[80px] bg-white overflow-hidden shrink-0">
+    <li className="flex flex-col md:flex-row items-center justify-between border-b border-zinc-900 pb-[1.6rem]">
+      <div className="flex flex-col md:flex-row items-center gap-5 max-md:p-5">
+        <div className="relative rounded-md size-[150px] md:size-[80px] bg-white overflow-hidden shrink-0">
           <Image
             src={image}
             alt={title}
@@ -41,8 +41,8 @@ export const CartList: FC<CartListProps> = ({ item, quantity }) => {
           />
         </div>
         <div className="flex flex-col gap-3">
-          <h3 className="text-xl font-semibold line-clamp-2">{title}</h3>
-          <p className="flex gap-2">
+          <h3 className="text-lg md:text-xl font-semibold line-clamp-2 text-center md:text-left">{title}</h3>
+          <p className="flex gap-2 max-md:self-center">
             <button onClick={handleDecreaseQuantity}>
               <Icons.minus className="h-[24px] w-[24px] text-white" />
             </button>

@@ -19,7 +19,7 @@ export const HomeTemplate = () => {
   return (
     <section className="container">
       <h1 className="text-4xl font-bold text-center mt-14 mb-10">
-        Welcome to TechVerito
+        Welcome to TVerito Mart
       </h1>
       {list.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-10 p-4 max-w-7xl m-auto mb-5">
