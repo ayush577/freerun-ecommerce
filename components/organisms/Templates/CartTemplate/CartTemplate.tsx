@@ -67,7 +67,7 @@ export const CartTemplate = () => {
               </DialogTitle>
               <DialogClose
                 onClick={placeOrder}
-                className="text-white bg-orange-500 hover:bg-orange-600"
+                className="p-2 rounded-sm text-white bg-orange-500 hover:bg-orange-600"
               >
                 Continue Shopping
               </DialogClose>
