@@ -1,12 +1,26 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:react/recommended"],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:react/recommended",
+    "plugin:testing-library/react",
+    "plugin:jest-dom/recommended"
+  ],
   "rules": {
     "no-unused-vars": "error",
-    "react/no-unknown-property": "error"
+    "react/no-unknown-property": "error",
+    "no-empty": "error"
   },
   "settings": {
     "react": {
       "version": "detect"
     }
-  }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "rules": {
+        "strict": ["error", "global"]
+      }
+    }
+  ]
 }
