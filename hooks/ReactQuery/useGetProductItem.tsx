@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useGetProductItem = () => {
   return useQuery({
-    queryKey: ["product"],
+    queryKey: ["products"],
     queryFn: products,
-    select: (data) => data.slice(0, 9)
   });
 };
+

@@ -1,5 +1,4 @@
-import React from 'react'
-import { useCart } from '@/context/CardContext'
+import React, { useMemo } from 'react'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { ProductItem as ProductItemType } from '@/lib/product-types'
 import { FC } from 'react'
@@ -10,6 +9,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { useAtomValue } from 'jotai'
+import { cartAtom, useCart } from '@/context/JotaiCart'
 
 interface ProductItemProps {
   item: ProductItemType
@@ -17,64 +20,99 @@ interface ProductItemProps {
 
 export const ProductItem: FC<ProductItemProps> = ({ item }) => {
   //* Props
-  const { title, price, category, image, description } = item
+  const {
+    title,
+    price,
+    category,
+    image,
+    description,
+    rating: { rate },
+  } = item
 
   //* Media Query
   const isDesktop = useMediaQuery('(min-width: 1300px) and (max-width: 2400px)')
   const isTablet = useMediaQuery('(min-width: 600px) and (max-width: 1299px)')
 
-  //* Cart Context
-  const { addToCart, cart, decreaseQuantity, increaseQuantity } = useCart()
+  //* Cart state
+  const quantity = useAtomValue(cartAtom)
+  const { addToCart, increaseQuantity, decreaseQuantity } = useCart()
 
   //* Functions
-  const isItemInCart = cart.some(cartItem => cartItem.product.id === item.id)
-  
+  const isItemInCart = useMemo(
+    () => quantity.some(cartItem => cartItem.product.id === item.id),
+    [quantity, item.id],
+  )
+
+  const itemQuantity = quantity.find(
+    cartItem => cartItem.product.id === item.id,
+  )?.quantity
+
   const handleAddToCart = () => {
     addToCart(item)
   }
-  
+
   const handleIncreaseQuantity = () => {
     increaseQuantity(item)
   }
-  
+
   const handleDecreaseQuantity = () => {
     decreaseQuantity(item)
   }
 
   //* Render Functions Component
   const renderAddToCartButton = () => {
-    return (
-      isItemInCart ? (
-        <>
-          <div className="z-20 -mt-[2.2rem] flex w-[14rem] items-center justify-between rounded-full bg-orange-500 p-[1rem]">
-            <button onClick={handleDecreaseQuantity}>
-              <Icons.minus className="h-[24px] w-[24px] text-white" />
-            </button>
+    return isItemInCart ? (
+      <>
+        <div className="z-20 -mt-[2.2rem] flex w-[14rem] items-center justify-between rounded-full bg-orange-500 p-[1rem]">
+          <button onClick={handleDecreaseQuantity}>
+            <Icons.minus className="h-[24px] w-[24px] text-white" />
+          </button>
 
-            <span className="text-lg font-semibold text-white">
-              {cart.find(cartItem => cartItem.product.id === item.id)?.quantity}
-            </span>
-            <button onClick={handleIncreaseQuantity}>
-              <Icons.plus className="h-[24px] w-[24px] text-white" />
-            </button>
-          </div>
-        </>
-      ) : (
-        <button
-          className="group z-20 -mt-[2.2rem] flex w-[14rem] items-center justify-center gap-[0.8rem] rounded-full bg-orange-500 p-[1rem] transition-all duration-300 hover:border-orange-500"
-          onClick={handleAddToCart}
-        >
-          <Icons.cart className="h-[24px] w-[24px] text-white" />
-          <span className="text-lg font-semibold transition-all duration-300 group-hover:text-orange-100">
-            Add to cart
+          <span className="text-lg font-semibold text-white">
+            {itemQuantity}
           </span>
-        </button>
-      )
+          <button onClick={handleIncreaseQuantity}>
+            <Icons.plus className="h-[24px] w-[24px] text-white" />
+          </button>
+        </div>
+      </>
+    ) : (
+      <button
+        className="group z-20 -mt-[2.2rem] flex w-[14rem] items-center justify-center gap-[0.8rem] rounded-full bg-orange-500 p-[1rem] transition-all duration-300 hover:border-orange-500"
+        onClick={handleAddToCart}
+      >
+        <Icons.cart className="h-[24px] w-[24px] text-white" />
+        <span className="text-lg font-semibold transition-all duration-300 group-hover:text-orange-100">
+          Add to cart
+        </span>
+      </button>
+    )
+  }
+
+  //* Rating Component
+  const renderRating = () => {
+    return (
+      <Dialog>
+        <DialogContent className="py-10 flex items-center gap-2">
+          <React.Fragment>
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Button key={index} variant="ghost">
+                <Icons.star className="h-6 w-6 text-yellow-400" />
+              </Button>
+            ))}
+          </React.Fragment>
+        </DialogContent>
+        <DialogTrigger className="absolute top-3 left-3">
+          <div className="rounded-sm bg-orange-400 h-8 w-8 flex items-center justify-center cursor-pointer">
+            <span className="text-white">{rate}</span>
+          </div>
+        </DialogTrigger>
+      </Dialog>
     )
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="group relative flex flex-col items-center cursor-pointer">
       <div
         className={`relative rounded-[0.8rem] border-[4px] bg-white ${isDesktop ? 'h-[24rem] w-full' : isTablet ? 'h-[21rem] w-full' : 'h-[21rem] w-full'} ${isItemInCart ? 'border-orange-500' : 'border-transparent'}`}
       >
@@ -87,6 +125,7 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
         />
       </div>
       {renderAddToCartButton()}
+      {renderRating()}
       <div className="flex w-full flex-col gap-[0.4rem] pt-[1.6rem]">
         <small className="text-lg text-orange-300 capitalize">{category}</small>
         <h2
@@ -108,7 +147,9 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
             </PopoverTrigger>
             <PopoverContent>
               <div>
-                <h3 className="text-white text-xl font-semibold mb-3">{title}</h3>
+                <h3 className="text-white text-xl font-semibold mb-3">
+                  {title}
+                </h3>
                 <p className="text-white">{description}</p>
               </div>
             </PopoverContent>

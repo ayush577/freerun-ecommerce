@@ -1,11 +1,11 @@
 'use client'
 
-import { useCart } from '@/context/CardContext'
 import { ProductItem } from '@/lib/product-types'
 import React, { FC } from 'react'
 import Image from 'next/image'
 import { Icons } from '@/components/atom/Icons/Icons'
 import { Button } from '@/components/ui/button'
+import { useCart } from '@/context/JotaiCart'
 
 interface CartListProps {
   item: ProductItem
@@ -17,7 +17,7 @@ export const CartList: FC<CartListProps> = ({ item, quantity }) => {
   const { title, price, image } = item
 
   //* Hooks
-  const { removeFromCart, increaseQuantity, decreaseQuantity } = useCart()
+  const { increaseQuantity, decreaseQuantity, removeFromCart } = useCart()
 
   //* Functions
   const handleIncreaseQuantity = () => {

@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import { useCart } from '@/context/CardContext'
 import { EmptyCart } from '@/components/molecules/EmptyCart/EmptyCart'
 import { CartList } from '@/components/molecules/CartList/CartList'
 import { Button } from '@/components/ui/button'
@@ -12,9 +11,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Icons } from '@/components/atom/Icons/Icons'
+import { useAtom, useAtomValue } from 'jotai'
+import { cartAtom, isOrderConfirmedAtom } from '@/context/JotaiCart'
 
 export const CartTemplate = () => {
-  const { cart, placeOrder } = useCart()
+  const cart = useAtomValue(cartAtom)
+  const [placeOrder, setPlaceOrder] = useAtom(isOrderConfirmedAtom)
+
   const allItemsInCart = cart.reduce((acc, item) => acc + item.quantity, 0)
 
   const total = cart.reduce(
@@ -54,7 +57,7 @@ export const CartTemplate = () => {
               <Button
                 variant={'default'}
                 size={'lg'}
-                onClick={placeOrder}
+                onClick={() => setPlaceOrder(true)}
                 className="text-white bg-orange-500 hover:bg-orange-600 w-full"
               >
                 Confirm Order
@@ -62,13 +65,12 @@ export const CartTemplate = () => {
             </DialogTrigger>
             <DialogContent className="justify-items-center">
               <Icons.greenTick className="size-20 text-green-500 mb-3" />
-              <DialogTitle className="mb-2">
-                Great! Your order has been successfully placed.
-              </DialogTitle>
-              <DialogClose
-                onClick={placeOrder}
-                className="p-2 rounded-sm text-white bg-orange-500 hover:bg-orange-600"
-              >
+              {placeOrder && (
+                <DialogTitle className="mb-2">
+                  Great! Your order has been successfully placed.
+                </DialogTitle>
+              )}
+              <DialogClose className="p-2 rounded-sm text-white bg-orange-500 hover:bg-orange-600">
                 Continue Shopping
               </DialogClose>
             </DialogContent>
