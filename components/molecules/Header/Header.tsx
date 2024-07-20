@@ -13,8 +13,9 @@ import { cartAtom } from '@/context/JotaiCart';
 export const Header = () => {
   const [isClient, setIsClient] = useState(false)
   const cart = useAtomValue(cartAtom);
+  console.log("🚀 ~ Header ~ cart:", cart)
 
-  const allItemInCart = cart?.reduce((acc, item) => acc + item.quantity, 0)
+  const allItemInCart = cart.length ? cart?.reduce((acc, item) => acc + item.quantity, 0) : 0
 
   useEffect(() => {
     setIsClient(true)
