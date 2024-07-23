@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { ProductItem as ProductItemType } from '@/lib/product-types'
 import { FC } from 'react'
@@ -38,12 +38,11 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
   const { addToCart, increaseQuantity, decreaseQuantity } = useCart()
 
   //* Functions
-  const isItemInCart = useMemo(
-    () => quantity.some(cartItem => cartItem.product.id === item.id),
-    [quantity, item.id],
+  const isItemInCart = quantity?.some?.(
+    cartItem => cartItem.product.id === item.id,
   )
 
-  const itemQuantity = quantity.find(
+  const itemQuantity = quantity?.find?.(
     cartItem => cartItem.product.id === item.id,
   )?.quantity
 
