@@ -26,17 +26,19 @@ export const useCart = () => {
   const setCart = useSetAtom(cartAtom)
 
   const addToCart = (item: ProductItem) => {
-    setCart((prev: CartItem[]) => {
-      const itemIndex = prev.findIndex(
+    setCart((prev: CartItem[] | undefined) => {
+      const cartItems = Array.isArray(prev) ? prev : []
+
+      const itemIndex = cartItems.findIndex(
         cartItem => cartItem.product.id === item.id,
       )
 
       if (itemIndex !== -1) {
-        const updatedCart = [...prev]
+        const updatedCart = [...cartItems]
         updatedCart[itemIndex].quantity += 1
         return updatedCart
       } else {
-        return [...prev, { product: item, quantity: 1 }]
+        return [...cartItems, { product: item, quantity: 1 }]
       }
     })
   }
