@@ -1,21 +1,23 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import Home from '@/app/page'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { getQueryClient } from '@/components/atom/ReactQueryProvider/GetQueryClient'
 
 describe('Home', () => {
-  const queryClient = new QueryClient()
+  const queryClient = getQueryClient()
 
-  it('displays loading text when isloading is true', async () => {
+  it('renders a heading', async () => {
     render(
       <QueryClientProvider client={queryClient}>
         <Home />
       </QueryClientProvider>,
     )
-    expect(screen.getByText('Loading...')).toBeInTheDocument()
 
-    await waitFor(() =>
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument(),
-    )
+    const heading = screen.getByRole('heading', {
+      name: /Welcome to TVerito Mart\.js!/i,
+    })
+
+    expect(heading).toBeInTheDocument()
   })
 })

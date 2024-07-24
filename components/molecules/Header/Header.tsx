@@ -28,7 +28,7 @@ export const Header = () => {
           <nav className="flex items-center gap-2">
             <Tooltip>
               <TooltipTrigger asChild>
-                <Link href="/cart">
+                <Link href="/bookmarks">
                   <button
                     className={cn(
                       buttonVariants({

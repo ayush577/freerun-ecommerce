@@ -33,12 +33,10 @@ export default function RootLayout({
         <ReactQueryProvider>
           <JotaiProvider>
             <TooltipProvider>
-              {/* <CartProvider> */}
               <div className="relative z-50 flex min-h-screen flex-col">
                 <Header />
                 <main className="flex-1">{children}</main>
               </div>
-              {/* </CartProvider> */}
             </TooltipProvider>
           </JotaiProvider>
         </ReactQueryProvider>

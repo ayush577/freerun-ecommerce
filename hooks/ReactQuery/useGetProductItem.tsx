@@ -1,10 +1,12 @@
-import { products } from "@/endpoints/product";
-import { useQuery } from "@tanstack/react-query";
+import { products } from '@/endpoints/product'
+import { ProductItem } from '@/lib/product-types'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+
+export const productOptions: UseQueryOptions<ProductItem[]> = {
+  queryKey: ['products'],
+  queryFn: products,
+}
 
 export const useGetProductItem = () => {
-  return useQuery({
-    queryKey: ["products"],
-    queryFn: products,
-  });
-};
-
+  return useQuery<ProductItem[]>(productOptions)
+}

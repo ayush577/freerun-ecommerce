@@ -1,11 +1,12 @@
 'use client'
 import React from 'react'
 import { ProductItem } from '@/components/molecules/ProductItem/ProductItem'
-import { useGetProductItem } from '@/hooks/ReactQuery/useGetProductItem'
+import { productOptions } from '@/hooks/ReactQuery/useGetProductItem'
 import { ProductItem as ProductItemType } from '@/lib/product-types'
+import { useSuspenseQuery } from '@tanstack/react-query'
 
 export const HomeTemplate = () => {
-  const { data: productList, isLoading } = useGetProductItem()
+  const { data: productList, isLoading } = useSuspenseQuery(productOptions)
   const list: ProductItemType[] = productList || []
 
   if (isLoading) {

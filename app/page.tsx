@@ -3,17 +3,14 @@ import { HomeTemplate } from '@/components/organisms/Templates/HomeTemplate'
 import {
   dehydrate,
   HydrationBoundary,
-  QueryClient,
 } from '@tanstack/react-query'
-import { products } from '@/endpoints/product'
+import { productOptions } from '@/hooks/ReactQuery/useGetProductItem'
+import { getQueryClient } from '@/components/atom/ReactQueryProvider/GetQueryClient'
 
-export default async function Home() {
-  const queryClient = new QueryClient()
+export default function Home() {
+  const queryClient = getQueryClient()
 
-  await queryClient.prefetchQuery({
-    queryKey: ['products'],
-    queryFn: products,
-  })
+  void queryClient.prefetchQuery(productOptions)
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

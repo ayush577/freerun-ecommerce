@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import useMediaQuery from '@/hooks/useMediaQuery'
 import { ProductItem as ProductItemType } from '@/lib/product-types'
 import { FC } from 'react'
@@ -10,9 +10,15 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { useAtomValue } from 'jotai'
-import { cartAtom, useCart } from '@/context/JotaiCart'
+import {
+  bookMarkedAtom,
+  cartAtom,
+  useBookMark,
+  useCart,
+} from '@/context/JotaiCart'
+import { cn } from '@/lib/utils'
 
 interface ProductItemProps {
   item: ProductItemType
@@ -37,7 +43,15 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
   const quantity = useAtomValue(cartAtom)
   const { addToCart, increaseQuantity, decreaseQuantity } = useCart()
 
+  const bookMark = useAtomValue(bookMarkedAtom)
+  const { addToBookMark, removeFromBookMark } = useBookMark()
+
   //* Functions
+  const isItemInBookMark = useMemo(
+    () => bookMark?.some?.(bookMarkItem => bookMarkItem.id === item.id),
+    [bookMark, item],
+  )
+
   const isItemInCart = quantity?.some?.(
     cartItem => cartItem.product.id === item.id,
   )
@@ -110,6 +124,37 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
     )
   }
 
+  //* Bookmark Component
+  const renderBookmark = () => {
+    return isItemInBookMark ? (
+      <button
+        onClick={() => removeFromBookMark(item)}
+        className={cn(
+          buttonVariants({
+            variant: 'ghost',
+            className: 'hover:bg-orange-100',
+          }),
+          'absolute top-3 right-3 p-2',
+        )}
+      >
+        <Icons.bookmarkFilled className="h-6 w-6 text-orange-500" />
+      </button>
+    ) : (
+      <button
+        onClick={() => addToBookMark(item)}
+        className={cn(
+          buttonVariants({
+            variant: 'ghost',
+            className: 'hover:bg-orange-100',
+          }),
+          'absolute top-3 right-3 p-2',
+        )}
+      >
+        <Icons.bookmark className="h-6 w-6 text-orange-500" />
+      </button>
+    )
+  }
+
   return (
     <div className="group relative flex flex-col items-center cursor-pointer">
       <div
@@ -125,6 +170,7 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
       </div>
       {renderAddToCartButton()}
       {renderRating()}
+      {renderBookmark()}
       <div className="flex w-full flex-col gap-[0.4rem] pt-[1.6rem]">
         <small className="text-lg text-orange-300 capitalize">{category}</small>
         <h2
