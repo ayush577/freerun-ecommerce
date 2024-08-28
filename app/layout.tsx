@@ -12,9 +12,9 @@ import { JotaiProvider } from '@/components/atom/JotaiProvider/JotaiProvider'
 const fontSans = Inter({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: 'Product list with cart | TechVerito',
+  title: 'Product list with cart | Freerun Ecommerce',
   description:
-    'This is the product list with card assignment from TechVerito and it is built using Next.js',
+    'This is the product list with card assignment from Freerun Ecommerce and it is built using Next.js',
 }
 
 export default function RootLayout({

@@ -1,5 +1,5 @@
 export const siteConfig = {
-  name: 'TechVerito Assignment',
+  name: 'freerun-ecommerce',
   url: 'https://ayushgandhi.com',
 };
 
