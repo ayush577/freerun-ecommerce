@@ -10,7 +10,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Button, buttonVariants } from '@/components/ui/button'
+import { buttonVariants } from '@/components/ui/button'
 import { useAtomValue } from 'jotai'
 import {
   bookMarkedAtom,
@@ -19,6 +19,7 @@ import {
   useCart,
 } from '@/context/JotaiCart'
 import { cn } from '@/lib/utils'
+import ReadOnlyRating from '@/components/atom/StarRating/ReadOnlyRating'
 
 interface ProductItemProps {
   item: ProductItemType
@@ -76,7 +77,7 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
   const renderAddToCartButton = () => {
     return isItemInCart ? (
       <>
-        <div className="z-20 -mt-[2.2rem] flex w-[14rem] items-center justify-between rounded-full bg-orange-500 p-[1rem]">
+        <div className="z-[1] -mt-[2.2rem] flex w-[14rem] items-center justify-between rounded-full bg-orange-500 p-[1rem]">
           <button onClick={handleDecreaseQuantity}>
             <Icons.minus className="h-[24px] w-[24px] text-white" />
           </button>
@@ -91,7 +92,7 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
       </>
     ) : (
       <button
-        className="group z-20 -mt-[2.2rem] flex w-[14rem] items-center justify-center gap-[0.8rem] rounded-full bg-orange-500 p-[1rem] transition-all duration-300 hover:border-orange-500"
+        className="group z-[1] -mt-[2.2rem] flex w-[14rem] items-center justify-center gap-[0.8rem] rounded-full bg-orange-500 p-[1rem] transition-all duration-300 hover:border-orange-500"
         onClick={handleAddToCart}
       >
         <Icons.cart className="h-[24px] w-[24px] text-white" />
@@ -108,11 +109,8 @@ export const ProductItem: FC<ProductItemProps> = ({ item }) => {
       <Dialog>
         <DialogContent className="py-10 flex items-center gap-2">
           <React.Fragment>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <Button key={index} variant="ghost">
-                <Icons.star className="h-6 w-6 text-yellow-400" />
-              </Button>
-            ))}
+            {/* <StarRating readOnlyRating initialRating={rate} totalRating={5} /> */}
+            <ReadOnlyRating value={rate} max={5} />
           </React.Fragment>
         </DialogContent>
         <DialogTrigger className="absolute top-3 left-3">

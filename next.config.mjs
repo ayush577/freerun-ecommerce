@@ -7,6 +7,15 @@ const nextConfig = {
         hostname: "**"
       }
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/dashboard',
+        destination: '/dashboard/billing',
+        permanent: true,
+      }
+    ]
   }
 };
 

@@ -177,7 +177,7 @@ function CartProvider({ children }: { children: ReactNode }) {
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
 }
 
-function useCart() {
+function useCart2() {
   const context = useContext(CartContext)
   if (!context) {
     throw new Error('useCart must be used within a CartProvider')
@@ -185,4 +185,4 @@ function useCart() {
   return context
 }
 
-export { CartProvider, useCart }
+export { CartProvider, useCart2 }

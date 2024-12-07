@@ -1,41 +1,37 @@
 import { ProductItem } from '@/lib/product-types'
+import { api } from './api'
+import { SortBy } from '@/components/organisms/Templates/HomeTemplate/types'
 
-export async function products(): Promise<ProductItem[]> {
+export async function products(sort: SortBy = 'asc'): Promise<ProductItem[]> {
   try {
-    const response = await fetch('https://fakestoreapi.com/products')
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
-    }
-    const products: ProductItem[] = await response.json()
-    return products
+    return await api.get(`/products?sort=${sort}`)
   } catch (error) {
     console.error('There was a problem fetching the products:', error)
     throw error
   }
 }
 
-export const updateProduct = async (data: {
-  productId?: number
+export async function categories(): Promise<string[]> {
+  try {
+    return await api.get('/products/categories')
+  } catch (error) {
+    console.error('There was a problem fetching the categories:', error)
+    throw error
+  }
+}
+
+export const patchProduct = async (data: {
+  productId: number
   rating: number
 }) => {
   try {
-    const response = await fetch(`https://fakestoreapi.com/carts/${data.productId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-type': 'application/json',
+    return await api.patch(`/carts/${data.productId}`, {
+      rating: {
+        rate: data.rating,
       },
-      body: JSON.stringify({
-        rating: {
-          rate: data.rating
-        }
-      }),
     })
-    if (!response.ok) {
-      throw new Error('Network response was not ok')
-    }
-    const updateProduct = await response.json()
-    return updateProduct
   } catch (error) {
-    console.error('Its failed to update product item rating', error)
+    console.error('Failed to patch product item rating', error)
+    throw error
   }
 }

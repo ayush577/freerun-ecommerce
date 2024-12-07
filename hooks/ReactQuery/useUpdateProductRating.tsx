@@ -1,4 +1,4 @@
-import { updateProduct } from '@/endpoints/product'
+import { updateProduct } from '@/endpoints/product-old'
 import { useMutation } from '@tanstack/react-query'
 
 interface UpdateProductRatingProps {

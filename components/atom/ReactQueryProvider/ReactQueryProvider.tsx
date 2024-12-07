@@ -14,7 +14,7 @@ const ReactQueryDevtoolsProduction = React.lazy(() =>
   ),
 )
 
-const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
+export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
   const [showDevtools, setShowDevTools] = useState(false)
 
   const queryClient = getQueryClient()
@@ -37,4 +37,3 @@ const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
   )
 }
 
-export default ReactQueryProvider
